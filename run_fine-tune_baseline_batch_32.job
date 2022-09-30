@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#SBATCH --partition=gpu_shared_course
+#SBATCH --gres=gpu:2
+#SBATCH -w r33n3
+#SBATCH --job-name=M2M_baseline
+#SBATCH --time=48:00:00
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32000M
+#SBATCH --output=out_run_fine-tune_baseline_batch_32.out
+
+module purge
+module load 2021
+module load Anaconda3/2021.05
+
+source activate M2M
+
+srun python -m torch.distributed.launch --nproc_per_node=2 run_fine-tune_baseline_batch_32.py --sharded_ddp zero_dp_2
+
